@@ -33,34 +33,35 @@ public class ProgLang {
         code = scanner.nextLine();
         
         //check if do-while is correct
-        if(checkOrder(code)){
-            // check if ( ) { } [ ] are balanced
-            if(isBalanced(code)){
-                //split string into individual lexemes
-                StringTokenizer st = new StringTokenizer(code," ");  
-                 while (st.hasMoreTokens()) {  
-                     codelist.add(new Word(st.nextToken()));
+        checkOrder(code);
+        //check if ( ) { } [ ] are balanced
+        isBalanced(code);
+        //check what is missing in code
+        checkMissing(code); 
+        
+        //split string into individual lexemes
+        StringTokenizer st = new StringTokenizer(code," ");  
+        while (st.hasMoreTokens()) {  
+             codelist.add(new Word(st.nextToken()));
 
-                }
-    //            for (String val : code.split(" ")) {
-    //                val.trim();
-    //                codelist.add(new Word(val));
-    //            }
+        }
+//            for (String val : code.split(" ")) {
+//                val.trim();
+//                codelist.add(new Word(val));
+//            }
 
-                for (int i = 0; i < codelist.size(); i++) {
-                    //check and assign token to word
-                    checkToken(codelist.get(i));
+        for (int i = 0; i < codelist.size(); i++) {
+            //check and assign token to word
+            checkToken(codelist.get(i));
 
-                }
-                for (int i = 0; i < codelist.size(); i++) {
-                    //pang check kung tama yung naassign HAHA
-                    System.out.println(codelist.get(i).word + " = " + codelist.get(i).type);
-                }
-            }
-        }      
+        }
+        for (int i = 0; i < codelist.size(); i++) {
+            //pang check kung tama yung naassign HAHA
+            System.out.println(codelist.get(i).word + " = " + codelist.get(i).type);
+        }                          
     }
 
-    public static boolean isBalanced(String s) {
+    public static void isBalanced(String s) {
         for (int i = 0; i < s.length(); i++) {
             char x = s.charAt(i);
             if (x == '(' || x == '[' || x == '{') {
@@ -71,30 +72,41 @@ public class ProgLang {
             }
             if (x == ')'){
                 if(charstack.isEmpty())
-                    return false;                
+                    System.out.println("( missing");                
                 else if(charstack.peek() == '(') 
                     charstack.pop();
             } else if (x == ']'){
                 if(charstack.isEmpty())
-                    return false;
+                    System.out.println("[ missing");
                 else if(charstack.peek() == '[') 
                 charstack.pop();
             } else if (x == '}'){
                 if(charstack.isEmpty())
-                    return false;
+                    System.out.println("{ missing");
                 else if(charstack.peek() == '{')
                     charstack.pop();
             }
         }
-        return charstack.isEmpty();
+        if(!charstack.isEmpty())
+            System.out.println("missing closing block");
     }
     
-    public static boolean checkOrder(String sentence){
-        if(sentence.matches("do\\{.*?\\}while\\(.*?\\)")){
-            return true;
+    public static void checkOrder(String sentence){
+        if(sentence.matches("do \\{.*\\; \\} while \\(.*\\)")){
+            System.out.println("do-while correct");
         }
         else
-            return false;
+            System.out.println("do-while incorrect");
+    }
+    
+    public static void checkMissing(String sentence){
+        if(!sentence.contains(";")){
+            System.out.println("semicolon missing");
+        }
+        if(!sentence.contains("{") && !sentence.contains("}"))
+            System.out.println("braces missing");
+        if(!sentence.contains("(") && !sentence.contains(")"))
+            System.out.println("parenthesis missing");
     }
     
     public static void checkToken(Word w) {
