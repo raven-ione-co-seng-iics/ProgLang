@@ -23,7 +23,6 @@ public class ProgLang {
     public static LinkedList<Word> codelist = new LinkedList<Word>();
     //for checking of braces, bracket,parenthesis
     public static Deque<Character> charstack = new ArrayDeque<Character>();
-
     
     public static void main(String[] args) throws Exception {
         //String to be tested
@@ -33,31 +32,32 @@ public class ProgLang {
         System.out.println("Enter code");
         code = scanner.nextLine();
         
-        // check if ( ) { } [ ] are balanced
-        if (isBalanced(code)) {
-            //split string into individual lexemes
-            StringTokenizer st = new StringTokenizer(code," ");  
-             while (st.hasMoreTokens()) {  
-                 codelist.add(new Word(st.nextToken()));
-                 
-            }
-//            for (String val : code.split(" ")) {
-//                val.trim();
-//                codelist.add(new Word(val));
-//            }
+        //check if do-while is correct
+        if(checkOrder(code)){
+            // check if ( ) { } [ ] are balanced
+            if(isBalanced(code)){
+                //split string into individual lexemes
+                StringTokenizer st = new StringTokenizer(code," ");  
+                 while (st.hasMoreTokens()) {  
+                     codelist.add(new Word(st.nextToken()));
 
-            for (int i = 0; i < codelist.size(); i++) {
-                //check and assign token to word
-                checkToken(codelist.get(i));
-                
+                }
+    //            for (String val : code.split(" ")) {
+    //                val.trim();
+    //                codelist.add(new Word(val));
+    //            }
+
+                for (int i = 0; i < codelist.size(); i++) {
+                    //check and assign token to word
+                    checkToken(codelist.get(i));
+
+                }
+                for (int i = 0; i < codelist.size(); i++) {
+                    //pang check kung tama yung naassign HAHA
+                    System.out.println(codelist.get(i).word + " = " + codelist.get(i).type);
+                }
             }
-            for (int i = 0; i < codelist.size(); i++) {
-                //pang check kung tama yung naassign HAHA
-                System.out.println(codelist.get(i).word + " = " + codelist.get(i).type);
-            }
-        } else {
-           throw new Exception("Unbalanced Block characters");
-        }
+        }      
     }
 
     public static boolean isBalanced(String s) {
@@ -88,6 +88,15 @@ public class ProgLang {
         }
         return charstack.isEmpty();
     }
+    
+    public static boolean checkOrder(String sentence){
+        if(sentence.matches("do\\{.*?\\}while\\(.*?\\)")){
+            return true;
+        }
+        else
+            return false;
+    }
+    
     public static void checkToken(Word w) {
         String token = w.word;
         
@@ -112,9 +121,7 @@ public class ProgLang {
                 break;
             case ";":
                 w.type = "semiColon";
-            break;
-            
-            
+            break;          
         }
     }
 }
