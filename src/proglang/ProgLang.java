@@ -53,11 +53,15 @@ public class ProgLang {
         for (int i = 0; i < codelist.size(); i++) {
             //check and assign token to word
             checkToken(codelist.get(i));
+            if (codelist.get(i).type == null) {
+                regexChecker(codelist.get(i));
+            }
 
         }
         for (int i = 0; i < codelist.size(); i++) {
             //pang check kung tama yung naassign HAHA
-            System.out.println(codelist.get(i).word + " = " + codelist.get(i).type);
+            System.out.println(codelist.get(i).word + " -> " + codelist.get(i).type);
+            
         }                          
     }
 
@@ -133,7 +137,46 @@ public class ProgLang {
                 break;
             case ";":
                 w.type = "semiColon";
-            break;          
+            break;
+            case ">":
+                w.type = "expression";
+            break;
+            case "<":
+                w.type = "expression";
+            break;
+            case "<=":
+                w.type = "expression";
+            break;
+            case ">=":
+                w.type = "expression";
+            break;
+            case "=":
+                w.type = "equals";
+            break;
+            case "String":
+                w.type = "stringDataType";
+            break;
+            case "int":
+                w.type = "intDataType";
+            break;
+            
+            
         }
+    }
+    
+    public static void regexChecker(Word w) {
+        String token = w.word;
+        
+        String regexNumber = "\\d+";
+        String regexVariables = "\\w*[a-zA-Z]\\w*";
+        String regexString = "([\"'])(?:(?=(\\\\?))\\2.)*?\\1";
+        
+       if (token.matches(regexNumber)) {
+           w.type = "intValue";
+       } else if (token.matches(regexVariables)) {
+           w.type = "variable";
+       } else if (token.matches(regexString)) {
+           w.type = "stringValue";
+       }
     }
 }
