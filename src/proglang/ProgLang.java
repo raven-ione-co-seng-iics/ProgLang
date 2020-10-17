@@ -96,21 +96,25 @@ public class ProgLang {
     }
     
     public static void checkOrder(String sentence){
-        if(sentence.matches("do \\{.*\\; \\} while \\(.*\\)")){
-            System.out.println("do-while correct");
-        }
+        if(sentence.matches("do \\{.*\\; \\} while \\(.*\\) \\;"))
+            System.out.println("do-while correct");            
         else
             System.out.println("do-while incorrect");
+        if(sentence.contains("System.out.println (") && sentence.contains(")"))
+            System.out.println("SOP correct");
+        else
+            System.out.println("SOP incorrect");
+          
     }
     
     public static void checkMissing(String sentence){
-        if(!sentence.contains(";")){
-            System.out.println("semicolon missing");
-        }
+        if(!sentence.contains(";") || !sentence.contains(") ;") || !sentence.contains("; }"))
+            System.out.println("semicolon missing");         
         if(!sentence.contains("{") && !sentence.contains("}"))
             System.out.println("braces missing");
         if(!sentence.contains("(") && !sentence.contains(")"))
             System.out.println("parenthesis missing");
+        
     }
     
     public static void checkToken(Word w) {
@@ -158,9 +162,7 @@ public class ProgLang {
             break;
             case "int":
                 w.type = "intDataType";
-            break;
-            
-            
+            break;   
         }
     }
     
@@ -170,6 +172,7 @@ public class ProgLang {
         String regexNumber = "\\d+";
         String regexVariables = "\\w*[a-zA-Z]\\w*";
         String regexString = "([\"'])(?:(?=(\\\\?))\\2.)*?\\1";
+        String regexSOP = "System\\.out\\.println";
         
        if (token.matches(regexNumber)) {
            w.type = "intValue";
@@ -177,6 +180,8 @@ public class ProgLang {
            w.type = "variable";
        } else if (token.matches(regexString)) {
            w.type = "stringValue";
+       } else if (token.matches(regexSOP)) {
+           w.type = "SOP";
        }
     }
 }
